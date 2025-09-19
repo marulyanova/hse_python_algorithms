@@ -62,5 +62,11 @@ def test_complex_cases():
     assert prime_digits_before_n(69) == 19
 
 
+def test_corner_cases():
+    assert prime_digits_before_n(-1000) == 0
+    assert prime_digits_before_n(-1) == 0
+    assert prime_digits_before_n(0) == 0
+
+
 if __name__ == "__main__":
     pytest.main()
