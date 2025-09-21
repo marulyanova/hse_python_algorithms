@@ -8,7 +8,7 @@ class Node:
 
     # переопределяем метод __str__ для удобного отображения print'ами для отладки
     def __str__(self):
-        return self.node_value
+        return str(self.node_value)
 
 
 class Queue:
