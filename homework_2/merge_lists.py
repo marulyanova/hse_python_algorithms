@@ -1,10 +1,9 @@
-import pytest
 from typing import List, Tuple
 from stack_vs_queue import Node
 
 
 def create_linked_list(values: List[int]) -> Node | None:
-    """Создает связный список из поданных значений"""
+    """Создает связный список из поданных значений в формате списка int'ов"""
 
     if len(values) == 0:
         return None
@@ -19,7 +18,7 @@ def create_linked_list(values: List[int]) -> Node | None:
 
 
 def prepare_output(node: Node | None) -> List[int]:
-    """Создает обычный список для наглядного вывода из поданного связного списка"""
+    """Создает обычный список int'ов для наглядного вывода из поданного связного списка"""
 
     res = []
     while node is not None and node.node_value is not None:
@@ -55,15 +54,19 @@ def merge_lists_cycle(
         return (iterator, listt)
 
     while True:
+        # пока не переберем все элементы из двух списков
         if list1 is None and list2 is None:
             return prepare_output(res_node)
 
+        # если первый список уже перебрали, тогда перебираем второй
         elif list1 is None and list2 is not None:
             iterator, list2 = add_new_node(iterator, list2)
 
+        # если второй список уже перебрали, тогда перебираем первый
         elif list2 is None and list1 is not None:
             iterator, list1 = add_new_node(iterator, list1)
 
+        # если в обоих списках еще остались элементы, сравниваем значение текущего
         elif list2.node_value < list1.node_value:
             iterator, list2 = add_new_node(iterator, list2)
 
@@ -74,7 +77,7 @@ def merge_lists_cycle(
 def merge_lists_without_fictitious(list1: Node | None, list2: Node | None) -> List[int]:
     """Объединение двух связных списков в один без использования фиктивного элемента"""
 
-    res_node = None
+    res_node = None  # инициализируем начало списка с результатом как None
 
     # Проверка, если заведомо один из списков пуст или оба
     check = check_one_list_empty(list1, list2)
@@ -122,146 +125,3 @@ def merge_lists_with_fictitious(list1: Node | None, list2: Node | None) -> List[
     return merge_lists_cycle(
         res_node=res_node.next_node, list1=list1, list2=list2, iterator=iterator
     )
-
-
-# ------------------------------------------------------------------------------------
-
-
-def do_test(func, list1: List[int], list2: List[int]) -> List[int]:
-    return func(create_linked_list(list1), create_linked_list(list2))
-
-
-def test_test_case_without_fictitious():
-    list1 = [1, 2, 4]
-    list2 = [1, 3, 4]
-
-    assert do_test(merge_lists_without_fictitious, list1, list2) == [1, 1, 2, 3, 4, 4]
-
-
-def test_custom_without_fictitious():
-    list1 = []
-    list2 = []
-    assert do_test(merge_lists_without_fictitious, list1, list2) == []
-
-    list1 = [1]
-    list2 = []
-    assert do_test(merge_lists_without_fictitious, list1, list2) == [1]
-
-    list1 = []
-    list2 = [1]
-    assert do_test(merge_lists_without_fictitious, list1, list2) == [1]
-
-    list1 = [1]
-    list2 = [1]
-    assert do_test(merge_lists_without_fictitious, list1, list2) == [1, 1]
-
-    list1 = [1, 3]
-    list2 = [1, 2]
-    assert do_test(merge_lists_without_fictitious, list1, list2) == [1, 1, 2, 3]
-
-    list1 = [0, 1, 3, 10]
-    list2 = [1, 2, 4, 5]
-    assert do_test(merge_lists_without_fictitious, list1, list2) == [
-        0,
-        1,
-        1,
-        2,
-        3,
-        4,
-        5,
-        10,
-    ]
-
-    list1 = [3]
-    list2 = [1, 2, 4, 5]
-    assert do_test(merge_lists_without_fictitious, list1, list2) == [1, 2, 3, 4, 5]
-
-    list1 = []
-    list2 = [1, 2, 4, 5]
-    assert do_test(merge_lists_without_fictitious, list1, list2) == [1, 2, 4, 5]
-
-    list1 = [1, 2, 4, 5, 6]
-    list2 = []
-    assert do_test(merge_lists_without_fictitious, list1, list2) == [1, 2, 4, 5, 6]
-
-    list1 = [1, 2]
-    list2 = [3, 4]
-    assert do_test(merge_lists_without_fictitious, list1, list2) == [1, 2, 3, 4]
-
-    list1 = [3, 4]
-    list2 = [1, 2]
-    assert do_test(merge_lists_without_fictitious, list1, list2) == [1, 2, 3, 4]
-
-    list1 = [3, 4]
-    list2 = [3, 4]
-    assert do_test(merge_lists_without_fictitious, list1, list2) == [3, 3, 4, 4]
-
-
-def test_test_case_with_fictitious():
-    list1 = [1, 2, 4]
-    list2 = [1, 3, 4]
-
-    assert do_test(merge_lists_with_fictitious, list1, list2) == [1, 1, 2, 3, 4, 4]
-
-
-def test_custom_with_fictitious():
-    list1 = []
-    list2 = []
-    assert do_test(merge_lists_with_fictitious, list1, list2) == []
-
-    list1 = [1]
-    list2 = []
-    assert do_test(merge_lists_with_fictitious, list1, list2) == [1]
-
-    list1 = []
-    list2 = [1]
-    assert do_test(merge_lists_with_fictitious, list1, list2) == [1]
-
-    list1 = [1]
-    list2 = [1]
-    assert do_test(merge_lists_with_fictitious, list1, list2) == [1, 1]
-
-    list1 = [1, 3]
-    list2 = [1, 2]
-    assert do_test(merge_lists_with_fictitious, list1, list2) == [1, 1, 2, 3]
-
-    list1 = [0, 1, 3, 10]
-    list2 = [1, 2, 4, 5]
-    assert do_test(merge_lists_with_fictitious, list1, list2) == [
-        0,
-        1,
-        1,
-        2,
-        3,
-        4,
-        5,
-        10,
-    ]
-
-    list1 = [3]
-    list2 = [1, 2, 4, 5]
-    assert do_test(merge_lists_with_fictitious, list1, list2) == [1, 2, 3, 4, 5]
-
-    list1 = []
-    list2 = [1, 2, 4, 5]
-    assert do_test(merge_lists_with_fictitious, list1, list2) == [1, 2, 4, 5]
-
-    list1 = [1, 2, 4, 5, 6]
-    list2 = []
-    assert do_test(merge_lists_with_fictitious, list1, list2) == [1, 2, 4, 5, 6]
-
-    list1 = [1, 2]
-    list2 = [3, 4]
-    assert do_test(merge_lists_with_fictitious, list1, list2) == [1, 2, 3, 4]
-
-    list1 = [3, 4]
-    list2 = [1, 2]
-    assert do_test(merge_lists_with_fictitious, list1, list2) == [1, 2, 3, 4]
-
-    list1 = [3, 4]
-    list2 = [3, 4]
-    assert do_test(merge_lists_with_fictitious, list1, list2) == [3, 3, 4, 4]
-
-
-if __name__ == "__main__":
-    pytest.main()
