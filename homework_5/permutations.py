@@ -32,6 +32,7 @@ def permutations(nums: List[int]) -> List[List[int]]:
         return
 
     n = len(nums)
+    # запускаем рекурсию для каждого элемента из списка как первого в перестановке
     for idx, elem in enumerate(nums):
         generate_premutations_recursive(n, [elem], set([idx]))
 
