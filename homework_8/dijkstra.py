@@ -18,7 +18,7 @@ def dijkstra(start_v: int, data: List[List[int]]) -> List[int | float]:
     min_path[start_v] = 0
     used = [0] * n
 
-    for _ in range(len(data)):
+    for _ in range(n):
 
         # ищем непосещённую вершину с минимальным расстоянием до нее
         v = -1
@@ -37,7 +37,6 @@ def dijkstra(start_v: int, data: List[List[int]]) -> List[int | float]:
             # -1 <=> отсутствие связи
             if data[v][i] != -1:
                 # если путь через текущую рассматриваемую вершину короче, чем записанный, обновляем его
-                # добавляем в очередь для рассмотрения обновленного соседа
                 if min_path[v] + data[v][i] < min_path[i]:
                     min_path[i] = min_path[v] + data[v][i]
 

@@ -26,7 +26,7 @@ def find_connectivity_components(
             dfs(v)
 
             # после прохождения по текущей компоненте добавляем в результат множество её вершин
-            elems_comp.append(list(elems_cur_comp.copy()))
+            elems_comp.append(list(elems_cur_comp))
             elems_cur_comp.clear()
 
     return cnt_comp, elems_comp
